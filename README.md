@@ -6,7 +6,7 @@ Node.js APIs. Ships optional Express and Fastify adapters and a Zod
 integration. Zero required runtime dependencies.
 
 ```bash
-npm install api-response-kit
+npm install @dev_config/api-response
 ```
 
 ## Why
