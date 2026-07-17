@@ -1,0 +1,97 @@
+{
+  "name": "api-response",
+  "version": "1.0.0",
+  "description": "Type-safe, framework-agnostic success/error response envelopes, error classes, and offset + cursor pagination helpers for Node.js APIs. Ships optional Express and Fastify adapters.",
+  "keywords": [
+    "api",
+    "response",
+    "error-handling",
+    "http-errors",
+    "pagination",
+    "cursor-pagination",
+    "offset-pagination",
+    "typescript",
+    "express",
+    "fastify",
+    "rest",
+    "crud"
+  ],
+  "author": "Anwar <anwarkamal1434@gmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/org-utils/api-response.git"
+  },
+  "homepage": "https://github.com/org-utils/api-response#readme",
+  "bugs": {
+    "url": "https://github.com/org-utils/api-response/issues"
+  },
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./express": {
+      "types": "./dist/express.d.ts",
+      "import": "./dist/express.js",
+      "require": "./dist/express.cjs"
+    },
+    "./fastify": {
+      "types": "./dist/fastify.d.ts",
+      "import": "./dist/fastify.js",
+      "require": "./dist/fastify.cjs"
+    },
+    "./zod": {
+      "types": "./dist/zod.d.ts",
+      "import": "./dist/zod.js",
+      "require": "./dist/zod.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run typecheck && npm run test && npm run build"
+  },
+  "peerDependencies": {
+    "express": ">=4",
+    "fastify": ">=4",
+    "zod": ">=3"
+  },
+  "peerDependenciesMeta": {
+    "express": { "optional": true },
+    "fastify": { "optional": true },
+    "zod": { "optional": true }
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "tsup": "8.5.1",
+    "vitest": "4.1.10",
+    "express": "5.2.1",
+    "fastify": "5.10.0",
+    "zod": "4.4.3",
+    "@types/express": "5.0.6",
+    "@types/node": "22.15.0",
+    "supertest": "7.1.4",
+    "@types/supertest": "6.0.3"
+  }
+}
