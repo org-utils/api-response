@@ -1,6 +1,6 @@
 {
   "name": "@dev_config/api-response",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Type-safe, framework-agnostic success/error response envelopes, error classes, and offset + cursor pagination helpers for Node.js APIs. Ships optional Express and Fastify adapters.",
   "keywords": [
     "api",
@@ -78,9 +78,15 @@
     "zod": ">=3"
   },
   "peerDependenciesMeta": {
-    "express": { "optional": true },
-    "fastify": { "optional": true },
-    "zod": { "optional": true }
+    "express": {
+      "optional": true
+    },
+    "fastify": {
+      "optional": true
+    },
+    "zod": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "typescript": "5.9.3",
