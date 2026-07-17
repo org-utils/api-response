@@ -1,5 +1,5 @@
 {
-  "name": "api-response",
+  "name": "@dev_config/api-response",
   "version": "1.0.0",
   "description": "Type-safe, framework-agnostic success/error response envelopes, error classes, and offset + cursor pagination helpers for Node.js APIs. Ships optional Express and Fastify adapters.",
   "keywords": [
