@@ -1,4 +1,4 @@
-# @api-response
+# api-response-tsjs
 
 Type-safe, framework-agnostic **success/error response envelopes**, an
 **error class hierarchy**, and **offset + cursor pagination** helpers for
@@ -6,7 +6,7 @@ Node.js APIs. Ships optional Express and Fastify adapters and a Zod
 integration. Zero required runtime dependencies.
 
 ```bash
-npm install @api-response
+npm install api-response-tsjs
 ```
 
 ## Why
@@ -61,7 +61,7 @@ if (res.success) {
 ## Success responses
 
 ```ts
-import { ok, created, accepted, noContent, deleted, paginated } from "@api-response";
+import { ok, created, accepted, noContent, deleted, paginated } from "api-response-tsjs";
 
 ok({ id: 1, name: "Ada" });
 // { success: true, statusCode: 200, data: {...}, meta: { timestamp } }
@@ -86,7 +86,7 @@ All builders accept an options object for `message`, `meta`, and (for the
 generic `successResponse`) `statusCode`:
 
 ```ts
-import { successResponse } from "@api-response";
+import { successResponse } from "api-response-tsjs";
 
 successResponse(user, { message: "Profile updated", meta: { requestId: "req_123" } });
 ```
@@ -98,7 +98,7 @@ import {
   AppError, BadRequestError, ValidationError, UnauthorizedError, ForbiddenError,
   NotFoundError, ConflictError, TooManyRequestsError, InternalServerError,
   ServiceUnavailableError, // ...and more, see src/errors/app-error.ts
-} from "@api-response";
+} from "api-response-tsjs";
 
 throw new NotFoundError(`User ${id} not found`);
 throw new ValidationError("Invalid input", [{ field: "email", message: "must be a valid email" }]);
@@ -129,7 +129,7 @@ class InsufficientFundsError extends AppError {
 ### Turning *anything* thrown into a safe error
 
 ```ts
-import { normalizeError, errorResponse } from "@api-response";
+import { normalizeError, errorResponse } from "api-response-tsjs";
 
 try {
   await doSomething();
@@ -152,7 +152,7 @@ Best for small/medium datasets, admin UIs, anything needing "jump to page N"
 or a total count.
 
 ```ts
-import { parseOffsetParams, getOffset, buildOffsetMeta, paginated } from "@api-response";
+import { parseOffsetParams, getOffset, buildOffsetMeta, paginated } from "api-response-tsjs";
 
 // req.query = { page: "2", limit: "20" } (raw, untrusted strings)
 const params = parseOffsetParams(req.query, { defaultLimit: 20, maxLimit: 100 });
@@ -174,7 +174,7 @@ Best for large or fast-moving feeds - no expensive `COUNT(*)`/`OFFSET` scans,
 and results stay stable even as rows are inserted/deleted between requests.
 
 ```ts
-import { parseCursorParams, decodeCursor, buildCursorPage, paginated } from "@api-response";
+import { parseCursorParams, decodeCursor, buildCursorPage, paginated } from "api-response-tsjs";
 
 const params = parseCursorParams(req.query); // { cursor?, limit }
 
@@ -199,7 +199,7 @@ by (`{ id }`, `{ createdAt, id }` for a tiebreaker, etc). A malformed/tampered
 cursor decodes to a `ValidationError` (422), never a raw parse exception.
 
 ```ts
-import { isOffsetPagination, isCursorPagination } from "@api-response";
+import { isOffsetPagination, isCursorPagination } from "api-response-tsjs";
 
 if (isOffsetPagination(response.pagination)) {
   console.log(response.pagination.totalPages);
@@ -214,7 +214,7 @@ Thin, semantic aliases over `SuccessResponse<T>` for documenting route/service
 signatures - no runtime difference, just clearer intent:
 
 ```ts
-import type { GetOneResponse, ListResponse, CreateResponse, UpdateResponse, DeleteResponse } from "@api-response";
+import type { GetOneResponse, ListResponse, CreateResponse, UpdateResponse, DeleteResponse } from "api-response-tsjs";
 
 async function createUser(input: CreateUserInput): Promise<CreateResponse<User>> { ... }
 async function listUsers(params: OffsetPaginationParams): Promise<ListResponse<User>> { ... }
@@ -224,9 +224,9 @@ async function listUsers(params: OffsetPaginationParams): Promise<ListResponse<U
 
 ```ts
 import express from "express";
-import { asyncHandler, errorHandler, notFoundHandler } from "@api-response/express";
-import { NotFoundError } from "@api-response";
-import { ok } from "@api-response";
+import { asyncHandler, errorHandler, notFoundHandler } from "api-response-tsjs/express";
+import { NotFoundError } from "api-response-tsjs";
+import { ok } from "api-response-tsjs";
 
 const app = express();
 
@@ -252,8 +252,8 @@ your `onError` hook for logging.
 
 ```ts
 import Fastify from "fastify";
-import { createErrorHandler, notFoundHandler } from "@api-response/fastify";
-import { ok } from "@api-response";
+import { createErrorHandler, notFoundHandler } from "api-response-tsjs/fastify";
+import { ok } from "api-response-tsjs";
 
 const app = Fastify();
 
@@ -274,7 +274,7 @@ rejections are native.
 ## Zod integration
 
 ```ts
-import { fromZodError } from "@api-response/zod";
+import { fromZodError } from "api-response-tsjs/zod";
 
 const result = createUserSchema.safeParse(req.body);
 if (!result.success) throw fromZodError(result.error);
@@ -285,10 +285,10 @@ if (!result.success) throw fromZodError(result.error);
 
 | Module | Contents |
 |---|---|
-| `@api-response` | Types, error classes, `normalizeError`/`isAppError`, success/error builders, offset + cursor pagination helpers, `HttpStatus`, `ErrorCode` |
-| `@api-response/express` | `asyncHandler`, `errorHandler`, `notFoundHandler` |
-| `@api-response/fastify` | `createErrorHandler`, `notFoundHandler` |
-| `@api-response/zod` | `fromZodError` |
+| `api-response-tsjs` | Types, error classes, `normalizeError`/`isAppError`, success/error builders, offset + cursor pagination helpers, `HttpStatus`, `ErrorCode` |
+| `api-response-tsjs/express` | `asyncHandler`, `errorHandler`, `notFoundHandler` |
+| `api-response-tsjs/fastify` | `createErrorHandler`, `notFoundHandler` |
+| `api-response-tsjs/zod` | `fromZodError` |
 
 Express, Fastify, and Zod are **optional peer dependencies** - install only
 the ones you use; the core package has zero required runtime dependencies.
