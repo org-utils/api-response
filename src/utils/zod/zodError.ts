@@ -10,20 +10,10 @@ export interface ParsedZodError {
   flat: ErrorDetail[];
   messages: string[];
   pretty: string;
-  success: false;
 }
 
 export class ZodErrors {
-  /**
-   * Parse a ZodSchema and return a parsed error or data.
-   */
-  static safeParse<T>(schema: z.ZodSchema, data: T): ParsedZodError | z.ZodSafeParseSuccess<T> {
-    const result = schema.safeParse(data);
-    if (result.success) {
-      return result as z.ZodSafeParseSuccess<T>;
-    }
-    return this.parse(result.error) as ParsedZodError;
-  }
+
 
   /**
    * Convert a ZodError into multiple useful formats.
@@ -37,7 +27,6 @@ export class ZodErrors {
       flat,
       messages: flat.map((e) => e.message),
       pretty: z.prettifyError(error),
-      success: false,
     };
   }
 
