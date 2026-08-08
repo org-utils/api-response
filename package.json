@@ -75,7 +75,7 @@
   "peerDependencies": {
     "express": ">=4",
     "fastify": ">=4",
-    "zod": ">=3"
+    "zod": "^4.4.3"
   },
   "peerDependenciesMeta": {
     "express": {
@@ -89,15 +89,15 @@
     }
   },
   "devDependencies": {
-    "typescript": "5.9.3",
-    "tsup": "8.5.1",
-    "vitest": "4.1.10",
-    "express": "5.2.1",
-    "fastify": "5.10.0",
-    "zod": "4.4.3",
     "@types/express": "5.0.6",
     "@types/node": "22.15.0",
+    "@types/supertest": "6.0.3",
+    "express": "5.2.1",
+    "fastify": "5.10.0",
     "supertest": "7.1.4",
-    "@types/supertest": "6.0.3"
+    "tsup": "8.5.1",
+    "typescript": "5.9.3",
+    "vitest": "4.1.10",
+    "zod": "^4.4.3"
   }
 }
