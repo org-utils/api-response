@@ -1,5 +1,5 @@
 // Types
-export type { ApiResponse, SuccessResponse, ErrorResponse, ErrorPayload, ErrorDetail, ResponseMeta } from "./types/response.js";
+export type { ApiResponse, SuccessResponse, ErrorResponse, ErrorPayload, ErrorDetail, ResponseMeta } from "client-api-types";
 export type {
   PaginationMeta,
   PaginationParams,
@@ -9,7 +9,7 @@ export type {
   CursorPaginationParams,
   SortOrder,
   SortParams,
-} from "./types/pagination.js";
+} from "client-api-types";
 export { isOffsetPagination, isCursorPagination } from "./types/pagination.js";
 export type {
   GetOneResponse,
@@ -19,7 +19,7 @@ export type {
   DeleteResponse,
   BulkResult,
   BulkResponse,
-} from "./types/crud.js";
+} from "client-api-types";
 export { HttpStatus } from "./types/http-status.js";
 export type { HttpStatusCode } from "./types/http-status.js";
 
@@ -43,7 +43,7 @@ export {
   ServiceUnavailableError,
   GatewayTimeoutError,
 } from "./errors/app-error.js";
-export type { AppErrorOptions } from "./errors/app-error.js";
+export type { AppErrorOptions } from "client-api-types";
 export { ErrorCode } from "./errors/error-codes.js";
 export type { ErrorCodeValue } from "./errors/error-codes.js";
 export { isAppError, normalizeError } from "./errors/normalize.js";

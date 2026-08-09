@@ -1,5 +1,6 @@
+import { ErrorDetail } from "client-api-types";
 import z, { type ZodError } from "zod";
-import { ErrorDetail } from "../../types/response.js";
+
 
 export interface ErrorTree {
   [key: string]: ErrorTree | ErrorDetail[];

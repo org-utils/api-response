@@ -1,4 +1,4 @@
-import type { OffsetPaginationMeta, OffsetPaginationParams } from "../types/pagination.js";
+import type { OffsetPaginationMeta, OffsetPaginationParams } from "client-api-types";
 import { ValidationError } from "../errors/app-error.js";
 
 export interface OffsetParamsConfig {

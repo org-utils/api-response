@@ -2,7 +2,8 @@
 import { FastifyPluginAsync } from "fastify";
 import { z } from "zod";
 import { ErrorTree, ZodErrors } from "../../utils/zod/zodError.js";
-import { ErrorDetail } from "../../types/response.js";
+import { ErrorDetail } from "client-api-types";
+
 /**
  * Decorator added to Fastify instance for manual validation.
  *

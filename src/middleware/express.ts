@@ -8,7 +8,7 @@ import type {
 import { errorResponse } from "../responses/error.js";
 import { NotFoundError, ValidationError } from "../errors/app-error.js";
 import { normalizeError } from "../errors/normalize.js";
-import { SuccessResponse } from "../types/response.js";
+import { SuccessResponse } from "client-api-types";
 import { ZodErrors } from "../utils/zod/zodError.js";
 import z from "zod";
 

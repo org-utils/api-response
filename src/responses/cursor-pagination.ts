@@ -1,4 +1,5 @@
-import type { CursorPaginationMeta, CursorPaginationParams } from "../types/pagination.js";
+import type { CursorPaginationMeta, CursorPaginationParams } from "client-api-types";
+
 import { ValidationError } from "../errors/app-error.js";
 import { decodeCursor, encodeCursor } from "../utils/cursor.js";
 

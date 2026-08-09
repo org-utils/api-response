@@ -1,4 +1,5 @@
-import type { ErrorResponse, ResponseMeta } from "../types/response.js";
+import type { ErrorResponse, ResponseMeta } from "client-api-types";
+
 import { normalizeError } from "../errors/normalize.js";
 
 export interface ErrorResponseOptions {

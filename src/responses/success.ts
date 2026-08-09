@@ -1,5 +1,5 @@
-import type { ResponseMeta, SuccessResponse } from "../types/response.js";
-import type { PaginationMeta } from "../types/pagination.js";
+import type { PaginationMeta, ResponseMeta, SuccessResponse } from "client-api-types";
+
 import { HttpStatus } from "../types/http-status.js";
 import { buildMeta } from "../utils/meta.js";
 

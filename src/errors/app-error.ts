@@ -1,21 +1,7 @@
-import type { ErrorDetail, ErrorPayload } from "../types/response.js";
 import { HttpStatus } from "../types/http-status.js";
 import { ErrorCode } from "./error-codes.js";
+import type { AppErrorOptions, ErrorDetail, ErrorPayload } from "client-api-types";
 
-export interface AppErrorOptions {
-  /** Field-level breakdown, typically used by ValidationError. */
-  details?: ErrorDetail[];
-  /**
-   * Operational errors are expected, "normal" failures (bad input, not found,
-   * a duplicate key, ...) - safe to report to the client as-is. Programmer
-   * errors / unexpected exceptions (isOperational: false) should be logged
-   * loudly and their details hidden from the client in production.
-   */
-  isOperational?: boolean;
-  /** The underlying error this one wraps, if any (preserved for logging, never serialized to clients). */
-  cause?: unknown;
-  // [key: string]: unknown;
-}
 
 /**
  * Base class for every error this library throws or expects you to throw.
