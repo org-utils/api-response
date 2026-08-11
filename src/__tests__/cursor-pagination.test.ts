@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { buildCursorPage, parseCursorParams } from "../responses/cursor-pagination.js";
 import { decodeCursor, encodeCursor } from "../utils/cursor.js";
-import { ValidationError } from "../errors/app-error.js";
+import { ValidationError } from "../errors/index.js";
 
 describe("encodeCursor / decodeCursor", () => {
   it("round-trips a payload", () => {

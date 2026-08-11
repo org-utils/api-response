@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import express from "express";
 import request from "supertest";
 import { asyncHandler, errorHandler, notFoundHandler } from "../middleware/express.js";
-import { NotFoundError, TooManyRequestsError, ValidationError } from "../errors/app-error.js";
+import { NotFoundError, TooManyRequestsError, ValidationError } from "../errors/index.js";
 import { ok } from "../responses/success.js";
 
 function buildApp() {

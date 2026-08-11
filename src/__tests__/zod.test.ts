@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { fromZodError } from "../integrations/zod.js";
-import { ValidationError } from "../errors/app-error.js";
+import { ValidationError } from "../errors/index.js";
 
 describe("fromZodError", () => {
   const schema = z.object({

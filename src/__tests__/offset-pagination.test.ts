@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { buildOffsetMeta, getOffset, parseOffsetParams } from "../responses/offset-pagination.js";
-import { ValidationError } from "../errors/app-error.js";
+import { ValidationError } from "../errors/index.js";
 
 describe("parseOffsetParams", () => {
   it("applies defaults when nothing is provided", () => {

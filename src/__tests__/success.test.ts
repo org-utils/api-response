@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { accepted, created, deleted, noContent, ok, paginated, successResponse } from "../responses/success.js";
-import { HttpStatus } from "../types/http-status.js";
+import { HttpStatus } from "../errors/index.js";
+
 
 describe("success response builders", () => {
   it("ok() produces a 200 envelope with the given data", () => {

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import Fastify from "fastify";
 import { createErrorHandler, notFoundHandler } from "../middleware/fastify.js";
-import { NotFoundError, ValidationError } from "../errors/app-error.js";
+import { NotFoundError, ValidationError } from "../errors/index.js";
 import { ok } from "../responses/success.js";
 
 function buildApp() {

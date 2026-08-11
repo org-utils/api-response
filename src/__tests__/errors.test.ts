@@ -6,11 +6,12 @@ import {
   NotFoundError,
   TooManyRequestsError,
   ValidationError,
-} from "../errors/app-error.js";
-import { isAppError, normalizeError } from "../errors/normalize.js";
+  isAppError,
+  normalizeError,
+  HttpStatus,
+  ErrorCode,
+} from "../errors/index.js";
 import { errorResponse } from "../responses/error.js";
-import { HttpStatus } from "../types/http-status.js";
-import { ErrorCode } from "../errors/error-codes.js";
 
 describe("built-in error classes", () => {
   it("NotFoundError carries the right status code and error code", () => {
