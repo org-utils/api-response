@@ -1,1 +1,1 @@
-export * from "client-api-types";
+export type * from "client-api-types";
