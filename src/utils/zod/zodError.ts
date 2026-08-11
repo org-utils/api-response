@@ -1,4 +1,5 @@
-import { ErrorDetail } from "client-api-types";
+import type { ErrorDetail } from '../../types/index.js'
+
 import z, { type ZodError } from "zod";
 
 

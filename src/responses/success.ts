@@ -1,7 +1,8 @@
-import type { PaginationMeta, ResponseMeta, SuccessResponse } from "client-api-types";
+import type { ResponseMeta, PaginationMeta,SuccessResponse } from '../types/index.js'
 
-import { HttpStatus } from "../types/http-status.js";
+
 import { buildMeta } from "../utils/meta.js";
+import { HttpStatus } from "../errors/index.js";
 
 export interface SuccessOptions {
   message?: string;

@@ -1,4 +1,6 @@
-import { ValidationError } from "../errors/app-error.js";
+import {
+  ValidationError
+} from "../errors/index.js";
 
 /**
  * Encodes an arbitrary JSON-serializable payload (typically the sort-key

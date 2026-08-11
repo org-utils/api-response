@@ -1,8 +1,9 @@
 // fastify-validation-plugin.ts
 import { FastifyPluginAsync } from "fastify";
-import { z } from "zod";
+import  z  from "zod";
 import { ErrorTree, ZodErrors } from "../../utils/zod/zodError.js";
-import { ErrorDetail } from "client-api-types";
+import type { ErrorDetail } from '../../types/index.js'
+
 
 /**
  * Decorator added to Fastify instance for manual validation.

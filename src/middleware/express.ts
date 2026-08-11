@@ -6,10 +6,16 @@ import type {
   ErrorRequestHandler,
 } from "express";
 import { errorResponse } from "../responses/error.js";
-import { NotFoundError, ValidationError } from "../errors/app-error.js";
-import { normalizeError } from "../errors/normalize.js";
-import { SuccessResponse } from "client-api-types";
+
+import type { SuccessResponse } from '../types/index.js'
+
 import { ZodErrors } from "../utils/zod/zodError.js";
+import {
+  NotFoundError,
+  ValidationError,
+  normalizeError,
+} from "../errors/index.js";
+
 import z from "zod";
 
 /**

@@ -1,7 +1,10 @@
 import type { FastifyError, FastifyReply, FastifyRequest } from "fastify";
 import { errorResponse } from "../responses/error.js";
-import { NotFoundError, ValidationError } from "../errors/app-error.js";
-import { normalizeError } from "../errors/normalize.js";
+import {
+  NotFoundError,
+  ValidationError,
+  normalizeError,
+} from "../errors/index.js";
 import { ZodErrors } from "../utils/zod/zodError.js";
 import z from "zod";
 export * from "./plugins/fastify-schema-validations.js";

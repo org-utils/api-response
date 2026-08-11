@@ -1,4 +1,4 @@
-import { CursorPaginationMeta, OffsetPaginationMeta, PaginationMeta } from "client-api-types";
+import type { CursorPaginationMeta, OffsetPaginationMeta, PaginationMeta } from '../types/index.js'
 
 
 /** Narrowing helpers so consumers don't need to hand-roll `"type" in meta` checks. */

@@ -100,5 +100,8 @@
     "typescript": "5.9.3",
     "vitest": "4.1.10",
     "zod": "^4.4.3"
+  },
+  "dependencies": {
+    "client-api-errors": "^0.0.2"
   }
 }

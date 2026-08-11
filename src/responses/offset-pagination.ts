@@ -1,5 +1,8 @@
-import type { OffsetPaginationMeta, OffsetPaginationParams } from "client-api-types";
-import { ValidationError } from "../errors/app-error.js";
+import type { OffsetPaginationParams, OffsetPaginationMeta } from '../types/index.js'
+
+import {
+  ValidationError
+} from "../errors/index.js";
 
 export interface OffsetParamsConfig {
   defaultPage?: number;

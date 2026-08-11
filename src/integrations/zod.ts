@@ -1,7 +1,8 @@
 import type { ZodError } from "zod";
 
-import { ValidationError } from "../errors/app-error.js";
-import { ErrorDetail } from "client-api-types";
+import { ValidationError } from "../errors/index.js";
+import type { ErrorDetail} from '../types/index.js'
+
 
 /**
  * Converts a Zod validation failure into this library's `ValidationError`,

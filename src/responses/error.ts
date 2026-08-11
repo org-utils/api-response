@@ -1,6 +1,7 @@
-import type { ErrorResponse, ResponseMeta } from "client-api-types";
-
-import { normalizeError } from "../errors/normalize.js";
+import type { ResponseMeta, ErrorResponse } from '../types/index.js'
+import {
+  normalizeError
+} from "../errors/index.js";
 
 export interface ErrorResponseOptions {
   meta?: Partial<ResponseMeta>;

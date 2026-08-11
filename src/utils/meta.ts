@@ -1,4 +1,5 @@
-import { ResponseMeta } from "client-api-types";
+import type { ResponseMeta} from '../types/index.js'
+
 import { randomUUID } from "node:crypto";
 
 
