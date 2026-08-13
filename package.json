@@ -71,7 +71,11 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "build:local": "npm run typecheck && npm run test && npm run build",
-    "prepublishOnly": "npm run typecheck && npm run test && npm run build"
+    "changesets:init": "changeset init",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "publish": "changeset publish",
+    "release": "npm run typecheck && npm run test && npm run build"
   },
   "peerDependencies": {
     "express": ">=4",
@@ -90,6 +94,8 @@
     }
   },
   "devDependencies": {
+    "@changesets/changelog-github": "^1.0.0",
+    "@changesets/cli": "^3.0.0",
     "@types/express": "5.0.6",
     "@types/node": "22.15.0",
     "@types/supertest": "6.0.3",
