@@ -14,6 +14,7 @@ export default defineConfig({
   splitting: false,
   treeshake: true,
   target: "es2022",
+  tsconfig: "./tsconfig.json",
   outExtension({ format }) {
     return { js: format === "cjs" ? ".cjs" : ".js" };
   },
