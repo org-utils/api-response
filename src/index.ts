@@ -4,7 +4,7 @@ export * from "./types/index.js";
 export { isOffsetPagination, isCursorPagination } from "./types/pagination.js";
 
 // Errors
-export * from "./errors/index.js";
+
 // Response builders
 export {
   successResponse,
