@@ -1,5 +1,11 @@
 # api-response-tsjs
 
+## 0.0.8
+
+### Patch Changes
+
+- [`a586702`](https://github.com/org-utils/api-response/commit/a586702c9df3a54499abe1fa7081911c23571dbe) Thanks [@Anwarkamal143](https://github.com/Anwarkamal143)! - updated typescript deps
+
 ## 0.0.7
 
 ### Patch Changes
