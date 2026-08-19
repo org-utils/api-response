@@ -1,6 +1,6 @@
 {
   "name": "api-response-tsjs",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "description": "Type-safe, framework-agnostic success/error response envelopes, error classes, and offset + cursor pagination helpers for Node.js APIs. Ships optional Express, Fastify, and Hono adapters.",
   "keywords": [
     "api",
