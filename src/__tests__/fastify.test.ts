@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import Fastify from "fastify";
-import { createErrorHandler, notFoundHandler } from "../middleware/fastify.js";
+import { z } from "zod";
+import { createErrorHandler, notFoundHandler, validateRequest } from "../middleware/fastify.js";
 import { NotFoundError, ValidationError } from "../errors/index.js";
 import { ok } from "../responses/success.js";
 
@@ -24,6 +25,12 @@ function buildApp() {
   app.get("/boom", async () => {
     throw new Error("unexpected failure");
   });
+
+  app.post(
+    "/schema-validate",
+    { preHandler: validateRequest(z.object({ email: z.string().email() }), "body") },
+    async (request) => ok(request.body),
+  );
 
   app.setNotFoundHandler(notFoundHandler());
   app.setErrorHandler(createErrorHandler({ includeStack: false }));
@@ -73,5 +80,33 @@ describe("fastify adapter", () => {
     const res = await app.inject({ method: "GET", url: "/does-not-exist" });
     expect(res.statusCode).toBe(404);
     expect(res.json().success).toBe(false);
+  });
+
+  it("validateRequest accepts valid input and passes it through", async () => {
+    const app = buildApp();
+    const res = await app.inject({
+      method: "POST",
+      url: "/schema-validate",
+      payload: { email: "ada@example.com" },
+      headers: { "content-type": "application/json" },
+    });
+    expect(res.statusCode).toBe(200);
+    expect(res.json().data).toEqual({ email: "ada@example.com" });
+  });
+
+  it("validateRequest converts schema issues into ValidationError details", async () => {
+    const app = buildApp();
+    const res = await app.inject({
+      method: "POST",
+      url: "/schema-validate",
+      payload: { email: "not-an-email" },
+      headers: { "content-type": "application/json" },
+    });
+    expect(res.statusCode).toBe(422);
+    const body = res.json();
+    expect(body.success).toBe(false);
+    expect(body.error.code).toBe("VALIDATION_ERROR");
+    expect(body.error.details[0].field).toBe("email");
+    expect(body.error.message).toBe("Invalid body parameters");
   });
 });

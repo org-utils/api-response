@@ -1,8 +1,14 @@
 import type { ZodError } from "zod";
 
 import { ValidationError } from "../errors/index.js";
-import type { ErrorDetail} from '../types/index.js'
+import type { ErrorDetail } from "../types/index.js";
 
+import { ZodErrors, type ErrorTree, type ParsedZodError } from "../utils/zod/zodError.js";
+import { getIssueMessage } from "../utils/zod/zodPrettyErrors.js";
+
+export { fastifyValidationPlugin } from "./fastify-validation.js";
+export { ZodErrors, getIssueMessage };
+export type { ErrorTree, ParsedZodError };
 
 /**
  * Converts a Zod validation failure into this library's `ValidationError`,

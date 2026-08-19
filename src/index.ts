@@ -4,6 +4,8 @@ export * from "./types/index.js";
 export { isOffsetPagination, isCursorPagination } from "./types/pagination.js";
 
 // Errors
+export * from "./errors/index.js";
+export { ErrorCode } from "./errors/index.js";
 
 // Response builders
 export {
@@ -23,4 +25,3 @@ export { parseCursorParams, buildCursorPage, encodeCursor, decodeCursor, type Cu
 
 // Utilities
 export { generateRequestId } from "./utils/meta.js";
-export * from "./utils/zod/index.js"

@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import express from "express";
 import request from "supertest";
-import { asyncHandler, errorHandler, notFoundHandler } from "../middleware/express.js";
+import { z } from "zod";
+import { asyncHandler, errorHandler, notFoundHandler, validateRequest } from "../middleware/express.js";
 import { NotFoundError, TooManyRequestsError, ValidationError } from "../errors/index.js";
 import { ok } from "../responses/success.js";
 
@@ -25,6 +26,14 @@ function buildApp() {
       if (!req.body?.email) {
         throw new ValidationError("Invalid input", [{ field: "email", message: "email is required" }]);
       }
+    }),
+  );
+
+  app.post(
+    "/schema-validate",
+    validateRequest(z.object({ email: z.string().email() }), "body"),
+    asyncHandler(async (req, res) => {
+      res.json(ok(req.body));
     }),
   );
 
@@ -87,5 +96,20 @@ describe("express adapter", () => {
     expect(res.status).toBe(404);
     expect(res.body.success).toBe(false);
     expect(res.body.error.code).toBe("NOT_FOUND");
+  });
+
+  it("validateRequest accepts valid input and passes it through", async () => {
+    const res = await request(buildApp()).post("/schema-validate").send({ email: "ada@example.com" });
+    expect(res.status).toBe(200);
+    expect(res.body.data).toEqual({ email: "ada@example.com" });
+  });
+
+  it("validateRequest converts schema issues into ValidationError details", async () => {
+    const res = await request(buildApp()).post("/schema-validate").send({ email: "not-an-email" });
+    expect(res.status).toBe(422);
+    expect(res.body.success).toBe(false);
+    expect(res.body.error.code).toBe("VALIDATION_ERROR");
+    expect(res.body.error.details[0].field).toBe("email");
+    expect(res.body.error.message).toBe("Invalid body parameters");
   });
 });

@@ -9,14 +9,12 @@ import { errorResponse } from "../responses/error.js";
 
 import type { SuccessResponse } from '../types/index.js'
 
-import { ZodErrors } from "../utils/zod/zodError.js";
+import { extractValidationDetails, type ParsableSchema } from "../utils/validation.js";
 import {
   NotFoundError,
   ValidationError,
   normalizeError,
 } from "../errors/index.js";
-
-import z from "zod";
 
 /**
  * Wraps an async Express handler so a rejected promise is forwarded to
@@ -110,10 +108,13 @@ export function routeWrapper(
 }
 
 /**
- * Creates an Express middleware that validates request data using a Zod schema.
+ * Creates an Express middleware that validates request data using a schema.
+ * Works with any schema library exposing a `.parse` method (zod, valibot,
+ * arktype, yup, ...); thrown `{ issues: [...] }`-shaped failures are converted
+ * into a `ValidationError` with field-level details.
  * Supports validation of request body, query parameters, and URL parameters.
  *
- * @param schema - Zod schema to validate against
+ * @param schema - Schema to validate against (anything with a `.parse(data)` method)
  * @param location - Which part of the request to validate ('body' | 'query' | 'params')
  * @returns Express middleware that validates the specified request location
  *
@@ -185,21 +186,10 @@ export function routeWrapper(
  *     // Handler
  *   }
  * );
- *
- * // Custom error handler
- * app.use((err, req, res, next) => {
- *   if (err instanceof ValidationError) {
- *     const errors = ZodErrors.parse(err);
- *     return next(
- *       new ValidationError(`Invalid ${location} parameters`, errors.flat),
- *     );
- *   }
- *   next(err);
- * });
  * ```
  */
 export function validateRequest<T>(
-  schema: z.ZodSchema<T>,
+  schema: ParsableSchema<T>,
   location: "body" | "query" | "params" = "body",
 ) {
   return (req: Request, _res: Response, next: NextFunction) => {
@@ -223,10 +213,10 @@ export function validateRequest<T>(
 
       next();
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        const errors = ZodErrors.parse(error);
+      const details = extractValidationDetails(error);
+      if (details) {
         return next(
-          new ValidationError(`Invalid ${location} parameters`, errors.flat),
+          new ValidationError(`Invalid ${location} parameters`, details),
         );
       }
       next(error);

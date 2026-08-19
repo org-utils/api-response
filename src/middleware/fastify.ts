@@ -5,9 +5,7 @@ import {
   ValidationError,
   normalizeError,
 } from "../errors/index.js";
-import { ZodErrors } from "../utils/zod/zodError.js";
-import z from "zod";
-export * from "./plugins/fastify-schema-validations.js";
+import { extractValidationDetails, type ParsableSchema } from "../utils/validation.js";
 
 export interface FastifyErrorHandlerOptions {
   /** Include stack traces in the response body. Default: `process.env.NODE_ENV !== "production"`. */
@@ -68,6 +66,10 @@ export function notFoundHandler() {
 }
 // Helper function to create validation middleware
 /**
+ * Validates request data with a schema library exposing a `.parse` method
+ * (zod, valibot, arktype, ...); thrown `{ issues: [...] }`-shaped failures are
+ * converted into a `ValidationError` with field-level details.
+ *
  * @example
  * ```typescript
  * // Using with preHandler middleware
@@ -106,38 +108,26 @@ export function notFoundHandler() {
  * ```
  */
 export function validateRequest<T>(
-  schema: z.ZodSchema<T>,
+  schema: ParsableSchema<T>,
   location: "body" | "query" | "params" = "body",
 ) {
   return async (req: FastifyRequest, _reply: FastifyReply) => {
     try {
-      let data;
       switch (location) {
         case "body":
-          data = schema.parse(req.body);
-          req.body = data;
+          req.body = schema.parse(req.body) as FastifyRequest["body"];
           break;
         case "query":
-          data = schema.parse(req.query);
-          req.query = data as any;
+          req.query = schema.parse(req.query) as any;
           break;
         case "params":
-          data = schema.parse(req.params);
-          req.params = data as any;
+          req.params = schema.parse(req.params) as any;
           break;
       }
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        const errors = ZodErrors.parse(error);
-        // reply.code(400).send({
-        //   success: false,
-        //   statusCode: 400,
-        //   errors: errors.flat,
-        //   tree: errors.tree,
-        //   message: `Invalid ${location} parameters`
-        // });
-        throw new ValidationError(errors.pretty, errors.flat);
-        // return; // Ensure function returns
+      const details = extractValidationDetails(error);
+      if (details) {
+        throw new ValidationError(`Invalid ${location} parameters`, details);
       }
       throw error;
     }

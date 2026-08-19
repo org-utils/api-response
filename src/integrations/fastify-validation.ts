@@ -1,47 +1,8 @@
-// fastify-validation-plugin.ts
-import { FastifyPluginAsync } from "fastify";
-import  z  from "zod";
-import { ErrorTree, ZodErrors } from "../../utils/zod/zodError.js";
-import type { ErrorDetail } from '../../types/index.js'
+import type { FastifyPluginAsync } from "fastify";
+import z from "zod";
+import { ZodErrors, type ErrorTree } from "../utils/zod/zodError.js";
+import type { ErrorDetail } from "../types/index.js";
 
-
-/**
- * Decorator added to Fastify instance for manual validation.
- *
- * @example
- * ```typescript
- * // Validate body
- * const result = fastify.validate.body(
- *   z.object({ email: z.string().email() }),
- *   req.body
- * );
- *
- * if (result.success) {
- *   // result.data: { email: string }
- * } else {
- *   // result.errors: ErrorDetail[]
- *   // result.tree: ErrorTree
- * }
- * ```
- *
- * @example
- * ```typescript
- * // Validate query
- * const result = fastify.validate.query(
- *   z.object({ page: z.coerce.number().min(1).default(1) }),
- *   req.query
- * );
- * ```
- *
- * @example
- * ```typescript
- * // Validate params
- * const result = fastify.validate.params(
- *   z.object({ id: z.string().uuid() }),
- *   req.params
- * );
- * ```
- */
 /**
  * Result of a validation operation
  */
@@ -100,7 +61,7 @@ declare module "fastify" {
  *
  * @example
  * ```typescript
- * import fastifyValidationPlugin from './fastify-validation-plugin.js';
+ * import { fastifyValidationPlugin } from "api-response-tsjs/zod";
  *
  * // Register the plugin
  * await fastify.register(fastifyValidationPlugin);
@@ -113,7 +74,6 @@ declare module "fastify" {
  *   // result.errors contains formatted validation errors
  * }
  * ```
- *
  */
 export const fastifyValidationPlugin: FastifyPluginAsync = async (fastify) => {
   // Add validation decorator

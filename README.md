@@ -2,8 +2,10 @@
 
 Type-safe, framework-agnostic **success/error response envelopes**, an
 **error class hierarchy**, and **offset + cursor pagination** helpers for
-Node.js APIs. Ships optional Express and Fastify adapters and a Zod
-integration. Zero required runtime dependencies.
+Node.js APIs. Ships optional Express, Fastify, and Hono adapters and a Zod
+integration. No framework or validation dependencies - the only runtime
+dependency is the framework-agnostic `client-api-errors` package (error
+classes), with shared response types coming from `client-api-types`.
 
 ```bash
 npm install api-response-tsjs
@@ -21,7 +23,7 @@ Every non-trivial API ends up hand-rolling the same things:
   slightly different in every project
 
 This package is that, done once, fully typed, framework-agnostic at the
-core, with thin optional adapters for Express and Fastify.
+core, with thin optional adapters for Express, Fastify, and Hono.
 
 ## The response shape
 
@@ -248,6 +250,17 @@ converts any error reaching it (via `normalizeError`) into the standard
 `ErrorResponse` body, sets `Retry-After` for `TooManyRequestsError`, and calls
 your `onError` hook for logging.
 
+The Express adapter also ships `validateRequest(schema, location)` middleware
+for request validation. It works with **any schema library** exposing a
+`.parse(data)` method (zod, valibot, arktype, ...) - thrown `{ issues: [...] }`
+failures become a `ValidationError` with field-level `details`:
+
+```ts
+import { validateRequest } from "api-response-tsjs/express";
+
+app.post("/users", validateRequest(userSchema, "body"), (req, res) => { ... });
+```
+
 ## Fastify adapter
 
 ```ts
@@ -269,16 +282,55 @@ app.setErrorHandler(createErrorHandler({
 ```
 
 Fastify handlers can just `return` data or `throw` - no wrapper needed, async
-rejections are native.
+rejections are native. The adapter also ships `validateRequest(schema, location)`
+for `preHandler` validation (schema-agnostic, same behavior as Express).
+
+## Hono adapter
+
+```ts
+import { Hono } from "hono";
+import { createErrorHandler, notFoundHandler } from "api-response-tsjs/hono";
+import { ok } from "api-response-tsjs";
+
+const app = new Hono();
+
+app.get("/users/:id", (c) => {
+  const user = userService.getById(c.req.param("id")); // throws NotFoundError if missing
+  return c.json(ok(user));
+});
+
+app.notFound(notFoundHandler());
+app.onError(createErrorHandler({
+  onError: (err, c) => console.error({ err, url: c.req.url }, "request failed"),
+}));
+```
+
+`createErrorHandler` converts anything thrown in a handler (via
+`normalizeError`) into the standard `ErrorResponse` body, sets `Retry-After`
+for `TooManyRequestsError`, and echoes the `x-request-id` header into
+`meta.requestId` when present.
 
 ## Zod integration
 
 ```ts
-import { fromZodError } from "api-response-tsjs/zod";
+import { fromZodError, ZodErrors } from "api-response-tsjs/zod";
 
 const result = createUserSchema.safeParse(req.body);
 if (!result.success) throw fromZodError(result.error);
 // -> ValidationError with one ErrorDetail per Zod issue, field paths dot-joined
+```
+
+The `/zod` subpath is the home of everything zod-specific: `fromZodError`,
+the `ZodErrors` multi-format converter (`tree` / `flat` / `messages` /
+`pretty`), `getIssueMessage`, and the `fastifyValidationPlugin` (adds a
+typed `fastify.validate.body/query/params` decorator):
+
+```ts
+import { fastifyValidationPlugin } from "api-response-tsjs/zod";
+
+await fastify.register(fastifyValidationPlugin);
+const result = fastify.validate.body(createUserSchema, req.body);
+if (result.success) { /* result.data */ } else { /* result.errors, result.tree */ }
 ```
 
 ## What's exported
@@ -286,12 +338,18 @@ if (!result.success) throw fromZodError(result.error);
 | Module | Contents |
 |---|---|
 | `api-response-tsjs` | Types, error classes, `normalizeError`/`isAppError`, success/error builders, offset + cursor pagination helpers, `HttpStatus`, `ErrorCode` |
-| `api-response-tsjs/express` | `asyncHandler`, `errorHandler`, `notFoundHandler` |
-| `api-response-tsjs/fastify` | `createErrorHandler`, `notFoundHandler` |
-| `api-response-tsjs/zod` | `fromZodError` |
+| `api-response-tsjs/express` | `asyncHandler`, `errorHandler`, `notFoundHandler`, `routeWrapper`, `validateRequest` |
+| `api-response-tsjs/fastify` | `createErrorHandler`, `notFoundHandler`, `validateRequest` |
+| `api-response-tsjs/hono` | `createErrorHandler`, `notFoundHandler` |
+| `api-response-tsjs/zod` | `fromZodError`, `ZodErrors`, `getIssueMessage`, `fastifyValidationPlugin` |
 
-Express, Fastify, and Zod are **optional peer dependencies** - install only
-the ones you use; the core package has zero required runtime dependencies.
+Full API reference for every method and config type: [docs/](docs/README.md).
+
+Express, Fastify, Hono, and Zod are **optional peer dependencies** - install
+only the ones you use. The core imports neither zod nor any framework code;
+its only dependencies are the framework-agnostic `client-api-errors` (error
+classes) and `client-api-types` (the shared response type contract, also
+installable by frontend clients).
 
 ## Design notes
 
@@ -311,6 +369,6 @@ the ones you use; the core package has zero required runtime dependencies.
 ```bash
 npm install
 npm run typecheck
-npm test        # 64 tests: builders, error classes, pagination, express/fastify integration (real HTTP requests), zod
+npm test        # 74 tests: builders, error classes, pagination, express/fastify/hono integration (real HTTP requests), zod
 npm run build   # tsup -> dist/ (ESM + CJS + .d.ts)
 ```
